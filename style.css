@@ -1,0 +1,29 @@
+#gameField {
+    display: inline-block;
+    border: 8px solid black;
+}
+
+.row {
+    height: 80px;
+}
+
+.field {
+    width: 80px;
+    height: 80px;
+    background-color: white;
+    display: inline-block;
+}
+
+.field:hover {
+    background-color: rgb(202, 225, 233);
+}
+
+.field img {
+    position: relative;
+    top: 8px;
+    left: 8px;
+}
+
+.grey-field {
+    background-color: grey;
+}

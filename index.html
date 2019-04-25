@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Hello World!</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="fontawesome/css/all.min.css">
+    <script src="figures.js"></script>
+  </head>
+  <body>
+
+<!-- <img src="king-b.png"> -->
+
+    <div id="gameField"></div>
+
+    <script>
+        const gameField = document.getElementById("gameField");
+
+        const fields = [];
+
+        function init(){
+            fields.push([new Rook("b"),new Knight("b"),new Bishop("b"),new Queen("b"),new King("b"),new Bishop("b"),new Knight("b"),new Rook("b")]);
+            fields.push([new Pawn("b"),new Pawn("b"),new Pawn("b"),new Pawn("b"),new Pawn("b"),new Pawn("b"),new Pawn("b"),new Pawn("b")]);
+
+            for(let i = 2; i < 6; i++){
+                fields.push([]);
+                for(let j = 0; j < 8; j++){
+                    fields[i][j] = null;
+                }
+            }
+
+            fields.push([new Pawn("w"),new Pawn("w"),new Pawn("w"),new Pawn("w"),new Pawn("w"),new Pawn("w"),new Pawn("w"),new Pawn("w")]);
+            fields.push([new Rook("w"),new Knight("w"),new Bishop("w"),new Queen("w"),new King("w"),new Bishop("w"),new Knight("w"),new Rook("w")]);
+
+            for(let i = 0; i < 8; i++){
+                let row = document.createElement("div");
+                row.classList.add("row");
+                for(let j = 0; j < 8; j++){
+                    let field = document.createElement("span");
+                    field.id = "" + i + j;
+                    field.classList.add("field");
+                    field.addEventListener("click", function(){
+                        showMovements(this.id[0],this.id[1]);
+                    })
+                    if(i % 2 === 0){
+                        if(j % 2 != 0){
+                            field.classList.add("grey-field");
+                        }
+                    }
+                    else{
+                        if(j % 2 === 0){
+                            field.classList.add("grey-field");
+                        }
+                    }
+                    row.appendChild(field);
+                }
+                gameField.appendChild(row);
+            }
+        }
+
+        
+
+        function resetField(){
+            let fields = document.getElementsByClassName("field");
+            Array.from(fields).forEach(element => {
+                while (element.firstChild) {
+                    element.removeChild(element.firstChild);
+                }
+            })
+        }
+
+        function displayFigures(){
+            resetField();
+            for(let i = 0; i < 8; i++){
+                for(let j = 0; j < 8; j++){
+                    if(fields[i][j]){
+                        if(fields[i][j] === "marker"){
+                            let img = document.createElement("img");
+                            img.src = "circle.png";
+                            document.getElementById(""+i+j).appendChild(img);
+                        }
+                        else{
+                            let img = document.createElement("img");
+                            img.src = fields[i][j].getNameAndColor() + ".png";
+                            document.getElementById(""+i+j).appendChild(img);
+                        }                                                 
+                    }
+                    else{
+                        let img = document.createElement("img");
+                        img.src = "";
+                        document.getElementById(""+i+j).appendChild(img);
+                    }                
+                }
+            }
+        }
+
+        function showMovements(x,y){
+            if(!fields[x][y]) return;
+
+            const movement = fields[x][y].getMovement();
+            console.log(movement);
+
+            if(movement.length ===2){
+                if(typeof movement[0] === "number"){
+                    const newX = Number(x) + movement[0];
+                    const newY = Number(y) + movement[1];
+                    console.log("X: " + newX + " Y: " + newY);
+                    fields[newX][newY] = "marker";
+                }
+            }
+            displayFigures();
+        }
+
+        init();
+
+        displayFigures();
+
+        document.getElementById("25").firstChild.src = "king-w.png"
+
+    </script>
+  </body>
+</html>
