@@ -14,6 +14,7 @@
     height: 80px;
     background-color: white;
     display: inline-block;
+    position: relative;
 }
 
 .field:hover {
@@ -21,13 +22,13 @@
 }
 
 .img-marker {
-    position: relative;
+    position: absolute;
     top: 25px;
     left: 25px;
 }
 
 .img-piece {
-    position: relative;
+    position: absolute;
     top: 8px;
     left: 8px;
 }

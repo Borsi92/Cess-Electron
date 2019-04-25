@@ -19,18 +19,28 @@
         const fields = [];
 
         function init(){
-            fields.push([new Rook("b"),new Knight("b"),new Bishop("b"),new Queen("b"),new King("b"),new Bishop("b"),new Knight("b"),new Rook("b")]);
-            fields.push([new Pawn("b"),new Pawn("b"),new Pawn("b"),new Pawn("b"),new Pawn("b"),new Pawn("b"),new Pawn("b"),new Pawn("b")]);
+            fields.push([{piece: new Rook("b"), marker: false},{piece: new Knight("b"), marker: false},{piece: new Bishop("b"), marker: false},
+            {piece: new Queen("b"), marker: false},{piece: new King("b"), marker: false},{piece: new Bishop("b"), marker: false},
+            {piece: new Knight("b"), marker: false},{piece: new Rook("b"), marker: false}]);
+
+            fields.push([{piece: new Pawn("b"), marker: false},{piece: new Pawn("b"), marker: false},{piece: new Pawn("b"), marker: false},
+            {piece: new Pawn("b"), marker: false},{piece: new Pawn("b"), marker: false},{piece: new Pawn("b"), marker: false},
+            {piece: new Pawn("b"), marker: false},{piece: new Pawn("b"), marker: false}]);
 
             for(let i = 2; i < 6; i++){
                 fields.push([]);
                 for(let j = 0; j < 8; j++){
-                    fields[i][j] = null;
+                    fields[i][j] = {piece: null, marker: false};
                 }
             }
 
-            fields.push([new Pawn("w"),new Pawn("w"),new Pawn("w"),new Pawn("w"),new Pawn("w"),new Pawn("w"),new Pawn("w"),new Pawn("w")]);
-            fields.push([new Rook("w"),new Knight("w"),new Bishop("w"),new Queen("w"),new King("w"),new Bishop("w"),new Knight("w"),new Rook("w")]);
+            fields.push([{piece: new Pawn("w"), marker: false},{piece: new Pawn("w"), marker: false},{piece: new Pawn("w"), marker: false},
+            {piece: new Pawn("w"), marker: false},{piece: new Pawn("w"), marker: false},{piece: new Pawn("w"), marker: false},
+            {piece: new Pawn("w"), marker: false},{piece: new Pawn("w"), marker: false}]);
+
+            fields.push([{piece: new Rook("w"), marker: false},{piece: new Knight("w"), marker: false},{piece: new Bishop("w"), marker: false},
+            {piece: new Queen("w"), marker: false},{piece: new King("w"), marker: false},{piece: new Bishop("w"), marker: false},
+            {piece: new Knight("w"), marker: false},{piece: new Rook("w"), marker: false}]);
 
             for(let i = 0; i < 8; i++){
                 let row = document.createElement("div");
@@ -55,6 +65,11 @@
 
                     let img = document.createElement("img");
                     field.appendChild(img);
+                    let markerImg = document.createElement("img");
+                    markerImg.src = "circle.png";
+                    markerImg.id = "" + i + j + "marker";
+                    markerImg.className = "img-marker";
+                    field.appendChild(markerImg);
 
                     row.appendChild(field);
                 }
@@ -67,6 +82,9 @@
             Array.from(fields).forEach(element => {
                 element.firstChild.src = "";
             })
+            Array.from(document.getElementsByClassName("img-marker")).forEach(element => {
+                element.style.display = "none";
+            })
         }
 
         function displayFigures(){
@@ -75,12 +93,11 @@
                 for(let j = 0; j < 8; j++){
                     let img = document.getElementById(""+i+j).firstChild;
                     if(fields[i][j]){
-                        if(fields[i][j] === "marker"){
-                            img.src = "circle.png";
-                            img.classList.add("img-marker");
+                        if(fields[i][j].marker){
+                            document.getElementById(""+i+j + "marker").style.display = "block";
                         }
-                        else{
-                            img.src = fields[i][j].getNameAndColor() + ".png";
+                        if(fields[i][j].piece){
+                            img.src = fields[i][j].piece.getNameAndColor() + ".png";
                             img.classList.add("img-piece");
                         }                                                 
                     }
@@ -95,8 +112,8 @@
         function deleteAllMarker(){
             for(let i = 0; i < 8; i++){
                 for(let j = 0; j < 8; j++){
-                    if(fields[i][j] === "marker")
-                        fields[i][j] = null;
+                    if(fields[i][j].marker)
+                        fields[i][j].marker = false;
                 }
             }
         }
@@ -105,8 +122,8 @@
             let position = 1;
             while(true){
                 try{
-                    if(fields[x + position][y] === null){
-                        fields[x + position][y] = "marker";
+                    if(fields[x + position][y].piece === null){
+                        fields[x + position][y].marker = true;
                         position++;
                     }
                     else{
@@ -122,8 +139,8 @@
             position = 1;
             while(true){
                 try{
-                    if(fields[x - position][y] === null){
-                        fields[x - position][y] = "marker";
+                    if(fields[x - position][y].piece === null){
+                        fields[x - position][y].marker = true;
                         position++;
                     }
                     else{
@@ -137,8 +154,8 @@
             position = 1;
             while(true){
                 try{
-                    if(fields[x][y - position] === null){
-                        fields[x][y - position] = "marker";
+                    if(fields[x][y - position].piece === null){
+                        fields[x][y - position].marker = true;
                         position++;
                     }
                     else{
@@ -152,8 +169,8 @@
             position = 1;
             while(true){
                 try{
-                    if(fields[x][y + position] === null){
-                        fields[x][y + position] = "marker";
+                    if(fields[x][y + position].piece === null){
+                        fields[x][y + position].marker = true;
                         position++;
                     }
                     else{
@@ -170,8 +187,8 @@
             let position = 1;
             while(true){
                 try{
-                    if(fields[x - position][y - position] === null){
-                        fields[x - position][y - position] = "marker";
+                    if(fields[x - position][y - position].piece === null){
+                        fields[x - position][y - position].marker = true;
                         position++;
                     }
                     else{
@@ -185,8 +202,8 @@
             position = 1;
             while(true){
                 try{
-                    if(fields[x + position][y + position] === null){
-                        fields[x + position][y + position] = "marker";
+                    if(fields[x + position][y + position].piece === null){
+                        fields[x + position][y + position].marker = true;
                         position++;
                     }
                     else{
@@ -200,8 +217,8 @@
             position = 1;
             while(true){
                 try{
-                    if(fields[x + position][y - position] === null){
-                        fields[x + position][y - position] = "marker";
+                    if(fields[x + position][y - position].piece === null){
+                        fields[x + position][y - position].marker = true;
                         position++;
                     }
                     else{
@@ -216,8 +233,8 @@
             position = 1;
             while(true){
                 try{
-                    if(fields[x - position][y + position] === null){
-                        fields[x - position][y + position] = "marker";
+                    if(fields[x - position][y + position].piece === null){
+                        fields[x - position][y + position].marker = true;
                         position++;
                     }
                     else{
@@ -234,24 +251,24 @@
             x = Number(x);
             y = Number(y);
 
-            console.log("TYP: " + fields[x][y]);
+            console.log("FELD: " + fields[x][y]);
 
-            if(fields[x][y] === "marker"){
+            if(fields[x][y].marker){
                 if(selectedPiece.getName() === "king"){
                     if((y - oldPosition.y) > 1){
-                        let rook = fields[x][y+1];
-                        fields[x][y+1] = null;
-                        fields[x][y-1] = rook;
+                        let rook = fields[x][y+1].piece;
+                        fields[x][y+1].piece = null;
+                        fields[x][y-1].piece = rook;
                     }
                     else if((oldPosition.y -y) > 1){
-                        let rook = fields[x][0];
-                        fields[x][0] = null;
-                        fields[x][3] = rook;
+                        let rook = fields[x][0].piece;
+                        fields[x][0].piece = null;
+                        fields[x][3].piece = rook;
                         y = 2;
                     }
                 }
-                fields[x][y] = selectedPiece;
-                fields[oldPosition.x][oldPosition.y] = null;
+                fields[x][y].piece = selectedPiece;
+                fields[oldPosition.x][oldPosition.y].piece = null;
                 deleteAllMarker();
                 displayFigures();
                 return;
@@ -259,12 +276,12 @@
 
             deleteAllMarker();
 
-            if(!fields[x][y]){
+            if(!fields[x][y].piece){
                 displayFigures();
                 return;
             }
 
-            selectedPiece = fields[x][y];
+            selectedPiece = fields[x][y].piece;
             oldPosition = {x: x, y: y};
 
             const movement = selectedPiece.getMovement();
@@ -272,12 +289,12 @@
 
             if(selectedPiece.getName() === "pawn"){
                 const newX = x + movement[0];
-                fields[newX][y] = "marker";
+                fields[newX][y].marker = true;
                 if(selectedPiece.getNameAndColor() === "pawn-b" && x === 1){
-                    fields[x + 2][y] = "marker";
+                    fields[x + 2][y].marker = true;
                 }
                 else if(selectedPiece.getNameAndColor() === "pawn-w" && x === 6){
-                    fields[x - 2][y] = "marker";
+                    fields[x - 2][y].marker = true;
                 }
             }
             else if(selectedPiece.getName() === "bishop"){                
@@ -293,121 +310,121 @@
             else if(selectedPiece.getName() === "king"){
                 // kurze Rochade
                 try{
-                    if(fields[x][y+1] === null && fields[x][y+2] === null && fields[x][y+3].getName() === "rook"){
-                        fields[x][y+2] = "marker";
+                    if(fields[x][y+1].piece === null && fields[x][y+2].piece === null && fields[x][y+3].piece.getName() === "rook"){
+                        fields[x][y+2].marker = true;
                     }
                 }
                 catch(e){}
                 // lange Rochade
                 try{
-                    if(fields[x][y-1] === null && fields[x][y-2] === null && fields[x][y-3] === null && fields[x][y-4].getName() === "rook"){
-                        fields[x][y-2] = "marker";
-                        fields[x][y-3] = "marker";
+                    if(fields[x][y-1].piece === null && fields[x][y-2].piece === null && fields[x][y-3].piece === null && fields[x][y-4].piece.getName() === "rook"){
+                        fields[x][y-2].marker = true;
+                        fields[x][y-3].marker = true;
                     }
                 }
                 catch(e){}                
                 try{
-                    if(fields[x+1][y] === null){
-                        fields[x+1][y] = "marker";
+                    if(fields[x+1][y].piece === null){
+                        fields[x+1][y].marker = true;
                     }
                 }
                 catch(e){}
                 try{
-                    if(fields[x-1][y] === null){
-                        fields[x-1][y] = "marker";
+                    if(fields[x-1][y].piece === null){
+                        fields[x-1][y].marker = true;
                     }
                 }
                 catch(e){}
                 try{
-                    if(fields[x][y-1] === null){
-                        fields[x][y-1] = "marker";
+                    if(fields[x][y-1].piece === null){
+                        fields[x][y-1].marker = true;
                     }
                 }
                 catch(e){}
                 try{
-                    if(fields[x][y+1] === null){
-                        fields[x][y+1] = "marker";
+                    if(fields[x][y+1].piece === null){
+                        fields[x][y+1].marker = true;
                     }
                 }
                 catch(e){}
                 try{
-                    if(fields[x+1][y+1] === null){
-                        fields[x+1][y+1] = "marker";
+                    if(fields[x+1][y+1].piece === null){
+                        fields[x+1][y+1].marker = true;
                     }
                 }
                 catch(e){}
                 try{
-                    if(fields[x-1][y-1] === null){
-                        fields[x-1][y-1] = "marker";
+                    if(fields[x-1][y-1].piece === null){
+                        fields[x-1][y-1].marker = true;
                     }
                 }
                 catch(e){}
                 try{
-                    if(fields[x+1][y-1] === null){
-                        fields[x+1][y-1] = "marker";
+                    if(fields[x+1][y-1].piece === null){
+                        fields[x+1][y-1].marker = true;
                     }
                 }
                 catch(e){}
                 try{
-                    if(fields[x-1][y+1] === null){
-                        fields[x-1][y+1] = "marker";
+                    if(fields[x-1][y+1].piece === null){
+                        fields[x-1][y+1].marker = true;
                     }
                 }
                 catch(e){}
             }
             else if(selectedPiece.getName() === "knight"){
                 try{
-                    if(fields[x - 2][y - 1] === null){
-                        fields[x - 2][y - 1] = "marker";
+                    if(fields[x - 2][y - 1].piece === null){
+                        fields[x - 2][y - 1].marker = true;
                     }
                 }
                 catch(e){                    
                 }
                 try{
-                    if(fields[x + 2][y - 1] === null){
-                        fields[x + 2][y - 1] = "marker";
+                    if(fields[x + 2][y - 1].piece === null){
+                        fields[x + 2][y - 1].marker = true;
                     }
                 }
                 catch(e){                    
                 }
                 try{
-                    if(fields[x - 2][y + 1] === null){
-                        fields[x - 2][y + 1] = "marker";
+                    if(fields[x - 2][y + 1].piece === null){
+                        fields[x - 2][y + 1].marker = true;
                     }
                 }
                 catch(e){                    
                 }
                 try{
-                    if(fields[x + 2][y + 1] === null){
-                        fields[x + 2][y + 1] = "marker";
+                    if(fields[x + 2][y + 1].piece === null){
+                        fields[x + 2][y + 1].marker = true;
                     }
                 }
                 catch(e){                    
                 }
                 try{
-                    if(fields[x - 2][y - 1] === null){
-                        fields[x - 2][y - 1] = "marker";
+                    if(fields[x - 2][y - 1].piece === null){
+                        fields[x - 2][y - 1].marker = true;
                     }
                 }
                 catch(e){                    
                 }
                 try{
-                    if(fields[x + 2][y - 1] === null){
-                        fields[x + 2][y - 1] = "marker";
+                    if(fields[x + 2][y - 1].piece === null){
+                        fields[x + 2][y - 1].marker = true;
                     }
                 }
                 catch(e){                    
                 }
                 try{
-                    if(fields[x - 2][y + 1] === null){
-                        fields[x - 2][y + 1] = "marker";
+                    if(fields[x - 2][y + 1].piece === null){
+                        fields[x - 2][y + 1].marker = true;
                     }
                 }
                 catch(e){                    
                 }
                 try{
-                    if(fields[x + 2][y + 1] === null){
-                        fields[x + 2][y + 1] = "marker";
+                    if(fields[x + 2][y + 1].piece === null){
+                        fields[x + 2][y + 1].marker = true;
                     }
                 }
                 catch(e){                    
