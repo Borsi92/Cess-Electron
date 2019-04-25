@@ -5,6 +5,8 @@
 
 .row {
     height: 80px;
+    display: grid;
+    grid-template-columns: auto auto auto auto auto auto auto auto;
 }
 
 .field {
@@ -18,7 +20,13 @@
     background-color: rgb(202, 225, 233);
 }
 
-.field img {
+.img-marker {
+    position: relative;
+    top: 25px;
+    left: 25px;
+}
+
+.img-piece {
     position: relative;
     top: 8px;
     left: 8px;

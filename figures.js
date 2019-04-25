@@ -5,6 +5,10 @@ class Piece {
         this.movement = movement;
     }
 
+    getName(){
+        return this.name;
+    }
+
     getNameAndColor(){
         return this.name + "-" + this.color;
     }
