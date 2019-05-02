@@ -5,7 +5,7 @@
     <title>Hello World!</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="fontawesome/css/all.min.css">
-    <script src="figures.js"></script>
+    <script src="pieces.js"></script>
   </head>
   <body>
 
@@ -87,7 +87,7 @@
             })
         }
 
-        function displayFigures(){
+        function displayPieces(){
             resetField();
             for(let i = 0; i < 8; i++){
                 for(let j = 0; j < 8; j++){
@@ -122,11 +122,14 @@
             let position = 1;
             while(true){
                 try{
-                    if(fields[x + position][y].piece === null){
+                    if(!fields[x + position][y].piece){
                         fields[x + position][y].marker = true;
                         position++;
                     }
                     else{
+                        if(fields[x + position][y].piece.getColor() != selectedPiece.getColor()){
+                            fields[x + position][y].marker = true;
+                        }
                         break;
                     }
                 }
@@ -139,11 +142,14 @@
             position = 1;
             while(true){
                 try{
-                    if(fields[x - position][y].piece === null){
+                    if(!fields[x - position][y].piece){
                         fields[x - position][y].marker = true;
                         position++;
                     }
                     else{
+                        if(fields[x - position][y].piece.getColor() != selectedPiece.getColor()){
+                            fields[x - position][y].marker = true;
+                        }
                         break;
                     }
                 }
@@ -154,11 +160,14 @@
             position = 1;
             while(true){
                 try{
-                    if(fields[x][y - position].piece === null){
+                    if(!fields[x][y - position].piece){
                         fields[x][y - position].marker = true;
                         position++;
                     }
                     else{
+                        if(fields[x][y - position].piece.getColor() != selectedPiece.getColor()){
+                            fields[x][y - position].marker = true;
+                        }
                         break;
                     }
                 }
@@ -169,11 +178,14 @@
             position = 1;
             while(true){
                 try{
-                    if(fields[x][y + position].piece === null){
+                    if(!fields[x][y + position].piece){
                         fields[x][y + position].marker = true;
                         position++;
                     }
                     else{
+                        if(fields[x][y + position].piece.getColor() != selectedPiece.getColor()){
+                            fields[x][y + position].marker = true;
+                        }
                         break;
                     }
                 }
@@ -187,11 +199,14 @@
             let position = 1;
             while(true){
                 try{
-                    if(fields[x - position][y - position].piece === null){
+                    if(!fields[x - position][y - position].piece){
                         fields[x - position][y - position].marker = true;
                         position++;
                     }
                     else{
+                        if(fields[x - position][y - position].piece.getColor() != selectedPiece.getColor()){
+                            fields[x - position][y - position].marker = true;
+                        }
                         break;
                     }
                 }
@@ -202,11 +217,14 @@
             position = 1;
             while(true){
                 try{
-                    if(fields[x + position][y + position].piece === null){
+                    if(!fields[x + position][y + position].piece){
                         fields[x + position][y + position].marker = true;
                         position++;
                     }
                     else{
+                        if(fields[x + position][y + position].piece.getColor() != selectedPiece.getColor()){
+                            fields[x + position][y + position].marker = true;
+                        }
                         break;
                     }
                 }
@@ -217,11 +235,14 @@
             position = 1;
             while(true){
                 try{
-                    if(fields[x + position][y - position].piece === null){
+                    if(!fields[x + position][y - position].piece){
                         fields[x + position][y - position].marker = true;
                         position++;
                     }
                     else{
+                        if(fields[x + position][y - position].piece.getColor() != selectedPiece.getColor()){
+                            fields[x + position][y - position].marker = true;
+                        }
                         break;
                     }
                 }
@@ -233,11 +254,14 @@
             position = 1;
             while(true){
                 try{
-                    if(fields[x - position][y + position].piece === null){
+                    if(!fields[x - position][y + position].piece){
                         fields[x - position][y + position].marker = true;
                         position++;
                     }
                     else{
+                        if(fields[x - position][y + position].piece.getColor() != selectedPiece.getColor()){
+                            fields[x - position][y + position].marker = true;
+                        }
                         break;
                     }
                 }
@@ -251,7 +275,7 @@
             x = Number(x);
             y = Number(y);
 
-            console.log("FELD: " + fields[x][y]);
+            console.log("FELD: X: " + x + ", Y: " +y);
 
             if(fields[x][y].marker){
                 if(selectedPiece.getName() === "king"){
@@ -270,32 +294,47 @@
                 fields[x][y].piece = selectedPiece;
                 fields[oldPosition.x][oldPosition.y].piece = null;
                 deleteAllMarker();
-                displayFigures();
+                displayPieces();
                 return;
             }
 
             deleteAllMarker();
 
             if(!fields[x][y].piece){
-                displayFigures();
+                displayPieces();
                 return;
             }
 
             selectedPiece = fields[x][y].piece;
             oldPosition = {x: x, y: y};
 
-            const movement = selectedPiece.getMovement();
+            const movement = Number(selectedPiece.getMovement());
             console.log(movement);
 
             if(selectedPiece.getName() === "pawn"){
-                const newX = x + movement[0];
-                fields[newX][y].marker = true;
-                if(selectedPiece.getNameAndColor() === "pawn-b" && x === 1){
+                const newX = x + movement;
+                if(!fields[newX][y].piece){
+                    fields[newX][y].marker = true;
+                }
+                if(selectedPiece.getNameAndColor() === "pawn-b" && x === 1 && !fields[x + 2][y].piece){
                     fields[x + 2][y].marker = true;
                 }
-                else if(selectedPiece.getNameAndColor() === "pawn-w" && x === 6){
+                else if(selectedPiece.getNameAndColor() === "pawn-w" && x === 6 && !fields[x - 2][y].piece){
                     fields[x - 2][y].marker = true;
                 }
+
+                try{
+                    if(fields[x + movement][y+1].piece.getColor() != selectedPiece.getColor()){
+                        fields[x + movement][y+1].marker = true;
+                    }
+                }
+                catch(e){}
+                try{
+                    if(fields[x + movement][y-1].piece.getColor() != selectedPiece.getColor()){
+                        fields[x + movement][y-1].marker = true;
+                    }
+                }
+                catch(e){}
             }
             else if(selectedPiece.getName() === "bishop"){                
                 checkDiagonal(x,y);                
@@ -324,49 +363,49 @@
                 }
                 catch(e){}                
                 try{
-                    if(fields[x+1][y].piece === null){
+                    if(!fields[x+1][y].piece || fields[x+1][y].piece.getColor() != selectedPiece.getColor()){
                         fields[x+1][y].marker = true;
                     }
                 }
                 catch(e){}
                 try{
-                    if(fields[x-1][y].piece === null){
+                    if(!fields[x-1][y].piece || fields[x-1][y].piece.getColor() != selectedPiece.getColor()){
                         fields[x-1][y].marker = true;
                     }
                 }
                 catch(e){}
                 try{
-                    if(fields[x][y-1].piece === null){
+                    if(!fields[x][y-1].piece || fields[x][y-1].piece.getColor() != selectedPiece.getColor()){
                         fields[x][y-1].marker = true;
                     }
                 }
                 catch(e){}
                 try{
-                    if(fields[x][y+1].piece === null){
+                    if(!fields[x][y+1].piece || fields[x][y+1].piece.getColor() != selectedPiece.getColor()){
                         fields[x][y+1].marker = true;
                     }
                 }
                 catch(e){}
                 try{
-                    if(fields[x+1][y+1].piece === null){
+                    if(!fields[x+1][y+1].piece || fields[x+1][y+1].piece.getColor() != selectedPiece.getColor()){
                         fields[x+1][y+1].marker = true;
                     }
                 }
                 catch(e){}
                 try{
-                    if(fields[x-1][y-1].piece === null){
+                    if(!fields[x-1][y-1].piece || fields[x-1][y-1].piece.getColor() != selectedPiece.getColor()){
                         fields[x-1][y-1].marker = true;
                     }
                 }
                 catch(e){}
                 try{
-                    if(fields[x+1][y-1].piece === null){
+                    if(!fields[x+1][y-1].piece || fields[x+1][y-1].piece.getColor() != selectedPiece.getColor()){
                         fields[x+1][y-1].marker = true;
                     }
                 }
                 catch(e){}
                 try{
-                    if(fields[x-1][y+1].piece === null){
+                    if(!fields[x-1][y+1].piece || fields[x-1][y+1].piece.getColor() != selectedPiece.getColor()){
                         fields[x-1][y+1].marker = true;
                     }
                 }
@@ -374,56 +413,56 @@
             }
             else if(selectedPiece.getName() === "knight"){
                 try{
-                    if(fields[x - 2][y - 1].piece === null){
+                    if(!fields[x - 2][y - 1].piece || fields[x - 2][y - 1].piece.getColor() != selectedPiece.getColor()){
                         fields[x - 2][y - 1].marker = true;
                     }
                 }
                 catch(e){                    
                 }
                 try{
-                    if(fields[x + 2][y - 1].piece === null){
+                    if(!fields[x + 2][y - 1].piece || fields[x + 2][y - 1].piece.getColor() != selectedPiece.getColor()){
                         fields[x + 2][y - 1].marker = true;
                     }
                 }
                 catch(e){                    
                 }
                 try{
-                    if(fields[x - 2][y + 1].piece === null){
+                    if(!fields[x - 2][y + 1].piece || fields[x - 2][y + 1].piece.getColor() != selectedPiece.getColor()){
                         fields[x - 2][y + 1].marker = true;
                     }
                 }
                 catch(e){                    
                 }
                 try{
-                    if(fields[x + 2][y + 1].piece === null){
+                    if(!fields[x + 2][y + 1].piece || fields[x + 2][y + 1].piece.getColor() != selectedPiece.getColor()){
                         fields[x + 2][y + 1].marker = true;
                     }
                 }
                 catch(e){                    
                 }
                 try{
-                    if(fields[x - 1][y + 2].piece === null){
+                    if(!fields[x - 1][y + 2].piece || fields[x - 1][y + 2].piece.getColor() != selectedPiece.getColor()){
                         fields[x - 1][y + 2].marker = true;
                     }
                 }
                 catch(e){                    
                 }
                 try{
-                    if(fields[x - 1][y - 2].piece === null){
+                    if(!fields[x - 1][y - 2].piece || fields[x - 1][y - 2].piece.getColor() != selectedPiece.getColor()){
                         fields[x - 1][y - 2].marker = true;
                     }
                 }
                 catch(e){                    
                 }
                 try{
-                    if(fields[x + 1][y + 2].piece === null){
+                    if(!fields[x + 1][y + 2].piece || fields[x + 1][y + 2].piece.getColor() != selectedPiece.getColor()){
                         fields[x + 1][y + 2].marker = true;
                     }
                 }
                 catch(e){                    
                 }
                 try{
-                    if(fields[x + 1][y - 2].piece === null){
+                    if(!fields[x + 1][y - 2].piece || fields[x + 1][y - 2].piece.getColor() != selectedPiece.getColor()){
                         fields[x + 1][y - 2].marker = true;
                     }
                 }
@@ -431,7 +470,7 @@
                 }
             }
 
-            displayFigures();
+            displayPieces();
 
             console.log("SELECTED PIECE: " + selectedPiece);
         }
@@ -441,7 +480,7 @@
 
         init();
 
-        displayFigures();
+        displayPieces();
     </script>
   </body>
 </html>

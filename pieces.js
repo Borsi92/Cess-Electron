@@ -9,6 +9,10 @@ class Piece {
         return this.name;
     }
 
+    getColor(){
+        return this.color;
+    }
+
     getNameAndColor(){
         return this.name + "-" + this.color;
     }
@@ -22,10 +26,10 @@ class Pawn extends Piece {
     constructor(color){
         let movement;
         if(color === "b"){
-            movement = [1,0];
+            movement = 1;
         }
         else{
-            movement = [-1,0];
+            movement = -1;
         }
         super("pawn", color, movement);
     }
